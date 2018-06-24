@@ -6,9 +6,6 @@
                     <v-container fluid grid-list-lg>
                         <v-layout row>
                             <v-flex xs6>
-                                <!--<v-card :img="require(`${candidate.photo}`)" width="120" height="120">-->
-                                <!--<v-card-text></v-card-text>-->
-                                <!--</v-card>-->
                                 <img :src="imgUrl(candidate)" width="120" height="120"/>
                             </v-flex>
                             <v-flex xs6>
@@ -158,7 +155,7 @@
             },
 
             imgUrl: function (img) {
-                return require('../assets/' + img + '.jpg')
+                return require(`../assets/${img}.jpg`)
             },
 
             session: function () {
