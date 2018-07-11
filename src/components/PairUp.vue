@@ -91,7 +91,6 @@
                     'Ahmed',
                     'Ekrem',
                     'Beytullah',
-                    'Alperen',
                     'Gorkem',
                     'Aras',
                     'Mustafa',
@@ -101,6 +100,7 @@
                     'Simay',
                     'Ahmet',
                     'Firat',
+                    'Merve',
                 ],
                 pairs: [],
                 paired: false,
@@ -110,7 +110,7 @@
         },
         methods: {
             pairups: async function () {
-                let retry = this.rnd(5, 10);
+                let retry = this.rnd(10, 15);
                 while (retry > 0) {
                     this.pairup();
                     await this.sleep(1000);
