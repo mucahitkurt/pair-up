@@ -6,11 +6,11 @@
                     <v-container fluid grid-list-lg>
                         <v-layout row>
                             <v-flex xs6>
-                                <img :src="imgUrl(candidate)" width="120" height="120"/>
+                                <img :src="imgUrl(candidate.name)" width="120" height="120"/>
                             </v-flex>
                             <v-flex xs6>
                                 <v-card-text>
-                                    <h1>{{candidate}}</h1>
+                                    <h1>{{candidate.name}}</h1>
                                 </v-card-text>
                             </v-flex>
                         </v-layout>
@@ -87,30 +87,30 @@
         data: function () {
             return {
                 candidates: [
-                    'Giray',
-                    'Ahmed',
-                    'Ekrem',
-                    'Beytullah',
-                    'Gorkem',
-                    'Aras',
-                    'Mustafa',
-                    'Deniz',
-                    'Tugce',
-                    'Ibrahim',
-                    'Simay',
-                    'Ahmet',
-                    'Firat',
-                    'Merve',
+                    {name: 'Giray', project: 'xp'},
+                    {name: 'Ahmed', project: 'xp'},
+                    {name: 'Ekrem', project: 'xp'},
+                    {name: 'Beytullah', project: 'xp'},
+                    {name: 'Gorkem', project: 'xp'},
+                    {name: 'Aras', project: 'xp'},
+                    {name: 'Mustafa', project: 'tts'},
+                    {name: 'Deniz', project: 'tts'},
+                    {name: 'Tugce', project: 'tts'},
+                    {name: 'Ibrahim', project: 'lega'},
+                    {name: 'Simay', project: 'lega'},
+                    {name: 'Ahmet', project: 'ats'},
+                    {name: 'Firat', project: 'ats'},
+                    {name: 'Merve', project: 'ats'},
                 ],
                 pairs: [],
                 paired: false,
                 snackbar: false,
-                sessionCount:1
+                sessionCount: 1
             };
         },
         methods: {
             pairups: async function () {
-                let retry = this.rnd(10, 15);
+                let retry = this.rnd(8, 16);
                 while (retry > 0) {
                     this.pairup();
                     await this.sleep(1000);
@@ -124,25 +124,33 @@
             pairup: function () {
                 this.pairs = [];
                 let matched = [];
+                let xpMember = this.candidates.filter(value => value.project === 'xp');
 
                 while (matched.length !== this.candidates.length) {
-                    let p1 = this.rnd(0, this.candidates.length - 1);
-                    while (matched.indexOf(p1) >= 0) {
+
+                    let p1;
+                    if (xpMember.length > 0) {
+                        let xpP1 = this.rnd(0, xpMember.length - 1);
+                        p1 = this.candidates.indexOf(xpMember[xpP1]);
+                        xpMember = xpMember.filter((value, index) => index !== xpP1);
+                    } else {
                         p1 = this.rnd(0, this.candidates.length - 1);
+                        while (matched.indexOf(p1) >= 0) {
+                            p1 = this.rnd(0, this.candidates.length - 1);
+                        }
                     }
 
                     let p2 = this.rnd(0, this.candidates.length - 1);
-                    while (p1 === p2 || matched.indexOf(p2) >= 0) {
+                    while (p1 === p2 || matched.indexOf(p2) >= 0 || xpMember.indexOf(this.candidates[p2]) >= 0) {
                         p2 = this.rnd(0, this.candidates.length - 1);
                     }
-
                     matched.push(p1, p2);
                     this.pairs.push({
                             p1: {
-                                name: this.candidates[p1],
+                                name: this.candidates[p1].name,
                             },
                             p2: {
-                                name: this.candidates[p2],
+                                name: this.candidates[p2].name,
                             }
                         }
                     );
@@ -161,16 +169,13 @@
             session: function () {
                 let newPairs = [];
                 for (let i = 1; i < this.pairs.length; i++) {
-                    newPairs.push({p1: this.pairs[i].p1, p2: this.pairs[i - 1].p2});
+                    newPairs.push({p1: this.pairs[i-1].p1, p2: this.pairs[i].p2});
                 }
-                newPairs.push({p1: this.pairs[0].p1, p2: this.pairs[this.pairs.length - 1].p2});
+                newPairs.push({p1: this.pairs[this.pairs.length - 1].p1, p2: this.pairs[0].p2});
                 this.pairs = newPairs;
                 this.sessionCount++;
             }
-
         }
-
-
     }
 </script>
 
